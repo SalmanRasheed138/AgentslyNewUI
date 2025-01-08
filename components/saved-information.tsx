@@ -95,15 +95,18 @@ export function SavedInformation({ isCollapsed }: SavedInformationProps) {
         <Accordion type="single" collapsible className="w-full" defaultValue="personal">
           {sections.map((section) => (
             <AccordionItem value={section.id} key={section.id}>
-              <AccordionTrigger className="px-4 py-2 text-sm font-medium hover:bg-gray-50">
+              <AccordionTrigger className={cn(
+                "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:bg-accent hover:text-accent-foreground",
+                "px-4 text-sm [&[data-state=open]>svg]:rotate-180"
+              )}>
                 {section.title}
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down px-4 pb-4 pt-0">
                 <div className="px-4 py-2 space-y-2">
                   {section.fields?.map((field) => (
-                    <div key={field.label} className="text-sm">
-                      <div className="text-gray-500">{field.label}</div>
-                      <div className="font-medium">{field.value}</div>
+                    <div key={field.label} className="text-sm py-1">
+                      <div className="text-muted-foreground">{field.label}</div>
+                      <div className="font-medium text-foreground">{field.value}</div>
                     </div>
                   ))}
                 </div>

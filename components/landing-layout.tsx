@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Moon, Sun, Phone, HelpCircle, ArrowRight, LayoutGrid, FileQuestionIcon as QuestionMarkIcon, ChevronLeft, ChevronRight, X, Info } from 'lucide-react'
@@ -21,10 +21,19 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isCallPopoverOpen, setIsCallPopoverOpen] = useState(false)
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <>
-      <style jsx global>{`
+      {/*<style jsx global>{`
         .scrollbar-thick::-webkit-scrollbar {
           width: 12px;
         }
@@ -39,10 +48,10 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
         .scrollbar-thick::-webkit-scrollbar-thumb:hover {
           background: #555;
         }
-      `}</style>
+      `}</style>*/}
       <div className={`min-h-screen flex flex-col ${theme}`}>
       {/* Navigation */}
-      <nav className="border-b relative z-[60]">
+      <nav className="border-b relative z-[60] bg-background">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo Section */}
@@ -209,7 +218,7 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
         {isSidebarOpen && (
           <div 
             className={cn(
-              "fixed inset-y-0 left-0 z-[70] bg-white border-r transition-all duration-300 flex flex-col overflow-hidden",
+              "fixed inset-y-0 left-0 z-[70] bg-background border-r transition-all duration-300 flex flex-col overflow-hidden",
               isSidebarCollapsed ? "w-[60px]" : "w-[300px]",
               "scrollbar-thick"
             )}
@@ -218,7 +227,7 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsSidebarOpen(false)}
-                className="absolute right-2 top-2 text-gray-500 hover:text-gray-700"
+                className="absolute right-2 top-2 text-muted-foreground hover:text-foreground"
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
@@ -230,19 +239,19 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
         {/* Overlay for mobile */}
         {isSidebarOpen && (
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-[65] lg:hidden"
+            className="fixed inset-0 bg-background/80 z-[65] lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
 
         {/* Content */}
-        <main className="flex-1">
+        <main className="flex-1 bg-background">
           {children}
         </main>
       </div>
 
       {/* Footer */}
-      <footer className="py-4 border-t relative z-40">
+      <footer className="py-4 border-t relative z-40 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center">
             <p className="text-xs sm:text-sm text-muted-foreground">
@@ -255,7 +264,7 @@ export function LandingLayout({ children }: { children: React.ReactNode }) {
       <Button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         size="icon"
-        className="fixed bottom-6 right-6 rounded-full shadow-lg bg-white hover:bg-gray-50 border text-[#6C5CE7] z-50"
+        className="fixed bottom-6 right-6 rounded-full shadow-lg bg-background hover:bg-accent border text-[#6C5CE7] z-50"
       >
         <QuestionMarkIcon className="h-4 w-4" />
       </Button>
